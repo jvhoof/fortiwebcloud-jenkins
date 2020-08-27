@@ -21,7 +21,7 @@ https://docs.fortinet.com/document/fortiweb-cloud/20.2.0/user-guide/700069/confi
 ```
 
 ## License
-[MIT](https://github.com/fortinet/terraform-secure-remote-access/blob/master/LICENSE)
+[MIT](https://github.com/fortinet/fortiwebcloud-jenkins/blob/master/LICENSE)
 
 ## Support
 
