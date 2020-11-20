@@ -31,22 +31,24 @@ pipeline {
                 timeout(time: 60, unit: 'SECONDS')
             }
             steps {
-                withEnv(["HOME=${env.WORKSPACE}"]) {
-                    script {
-                        def paras = "-u ${params.user} -p ${params.password} -d ${params.domain_name} -a ${params.application_name} -S ${params.origin_server_service} -D ${params.origin_server_port}  -s ${params.origin_server_ip} -t ${params.http} -P ${params.https} -g ${params.cdn} -b ${params.block}"
+                wrap([$class: 'MaskPasswordsBuildWrapper', varPasswordPairs: [[var: 'KEY', password: password]], varMaskRegexes: []]) {
+                    withEnv(["HOME=${env.WORKSPACE}"]) {
+                        script {
+                            def paras = "-u ${params.user} -p ${params.password} -d ${params.domain_name} -a ${params.application_name} -S ${params.origin_server_service} -D ${params.origin_server_port}  -s ${params.origin_server_ip} -t ${params.http} -P ${params.https} -g ${params.cdn} -b ${params.block}"
 
-                        if ("${params.extra_domains}" != "") {
-                           paras = paras + " -e ${params.extra_domains}"
-                        }
-                        if ("${params.template}" == "") {
-                            echo 'Start execute create app with para:'
-                            sh "python sources/create_app.py  ${paras}"
-                        } else {
-                            echo 'Start execute create app with template para:'
-                            sh "python sources/create_app.py  ${paras} -T ${params.template}"
+                            if ("${params.extra_domains}" != "") {
+                               paras = paras + " -e ${params.extra_domains}"
+                            }
+                            if ("${params.template}" == "") {
+                                echo 'Start execute create app with para:'
+                                sh "python sources/create_app.py  ${paras}"
+                            } else {
+                                echo 'Start execute create app with template para:'
+                                sh "python sources/create_app.py  ${paras} -T ${params.template}"
+                            }
                         }
                     }
-                }
+                }   
             }
         }
     }
